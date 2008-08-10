@@ -48,6 +48,10 @@ class MainController < Ramaze::Controller
     redirect '/'
   end
   
+  def error
+    "Huh? 404! Or is that 500? <a href='/'>Home</a>"
+  end
+  
   def zepto_path( id )
     "#{MAP_DIR}/#{id}"
   end
