@@ -30,6 +30,8 @@ class MainController < Ramaze::Controller
     File.open( path, 'w' ) do |f|
       f.puts uri
     end
+    
+    @original_uri = uri
   end
   
   def pez( id )
