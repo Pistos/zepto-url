@@ -37,9 +37,12 @@ class MainController < Ramaze::Controller
   def pez( id )
     if id
       id.gsub!( /[^#{ID_CHARS}]/, '' )
-      uri = File.read( zepto_path( id ) ).strip
-      if not uri.empty?
-        redirect uri
+      path = zepto_path( id )
+      if File.exists?( path ) and File.file?( path )
+        uri = File.read( path ).strip
+        if not uri.empty?
+          redirect uri
+        end
       end
     end
     redirect '/'
