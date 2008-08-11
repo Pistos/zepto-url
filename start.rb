@@ -11,7 +11,13 @@ class MainController < Ramaze::Controller
   ID_CHARS = (48..128).map{ |c| c.chr }.grep( /[[:alnum:]]/ )
   ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   
-  # Redirect using zepto id, or show home pgae.
+  def initialize
+    if not File.exist?( MAP_DIR )
+      FileUtils.mkdir MAP_DIR
+    end
+  end
+  
+  # Redirect using zepto id, or show home page.
   def index( id = nil )
     if id
       id.gsub!( /[^#{ID_CHARS}]/, '' )
@@ -30,9 +36,6 @@ class MainController < Ramaze::Controller
   def zep( zepto_uri_only = nil )
     uri = request[ 'uri' ]
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
-    if not File.exist?( MAP_DIR )
-      FileUtils.mkdir MAP_DIR
-    end
     
     # Generate unique ID for the URI.
     i = Dir[ "#{MAP_DIR }/*" ].size
