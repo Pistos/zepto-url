@@ -1,2 +1,2 @@
 # Delete all mappings older than 7 days.
-find . -mmin 10080 | xargs rm
+find /misc/git/zepto-url/mapping -mmin 10080 | xargs rm
