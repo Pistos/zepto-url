@@ -6,7 +6,17 @@ class MainController < Ramaze::Controller
   ID_CHARS = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
   ZEPTO_URI_BASE = "http://zep.purepistos.net/pez/"
   
-  def index
+  def index( id = nil )
+    if id
+      id.gsub!( /[^#{ID_CHARS}]/, '' )
+      path = zepto_path( id )
+      if File.exists?( path ) and File.file?( path )
+        uri = File.read( path ).strip
+        if not uri.empty?
+          redirect uri
+        end
+      end
+    end
   end
   
   def zep( uri = nil )
