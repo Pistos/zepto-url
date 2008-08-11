@@ -1,0 +1,2 @@
+# Delete all mappings older than 7 days.
+find . -mmin 10080 | xargs rm
