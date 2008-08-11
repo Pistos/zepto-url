@@ -38,18 +38,17 @@ class MainController < Ramaze::Controller
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
     
     # Generate unique ID for the URI.
-    zepto_id = nil
     next_index = nil
+    zepto_id = nil
     @mutex.synchronize do
       next_index = ( Dir[ "#{MAP_DIR }/*" ].map { |filename| filename.to_i }.max || 0 ) + 1
       zepto_id = index_to_id( next_index )
+      File.open( zepto_path( next_index ), 'w' ) do |f|
+        f.puts uri
+      end
     end
     
     @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
-    File.open( zepto_path( next_index ), 'w' ) do |f|
-      f.puts uri
-    end
-    
     @original_uri = uri
   end
   
