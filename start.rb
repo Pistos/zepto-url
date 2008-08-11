@@ -38,11 +38,11 @@ class MainController < Ramaze::Controller
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
     
     # Generate unique ID for the URI.
-    i = Dir[ "#{MAP_DIR }/*" ].size
+    index = Dir[ "#{MAP_DIR }/*" ].size
     r = 0
     a = []
-    while i > 0
-      i, r = i.divmod ID_CHARS.size
+    while index > 0
+      index, r = index.divmod ID_CHARS.size
       a.unshift r
     end
     zepto_id = a.map { |c| ID_CHARS[ c ] }.join
