@@ -4,7 +4,7 @@ class MainController < Ramaze::Controller
   MAP_DIR = "mapping"
   # If you change ID_CHARS ensure that it's filesystem safe.
   ID_CHARS = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-  ZEPTO_URI_BASE = "http://zep.purepistos.net/pez/"
+  ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   
   def index( id = nil )
     if id
@@ -42,20 +42,6 @@ class MainController < Ramaze::Controller
     end
     
     @original_uri = uri
-  end
-  
-  def pez( id )
-    if id
-      id.gsub!( /[^#{ID_CHARS}]/, '' )
-      path = zepto_path( id )
-      if File.exists?( path ) and File.file?( path )
-        uri = File.read( path ).strip
-        if not uri.empty?
-          redirect uri
-        end
-      end
-    end
-    redirect '/'
   end
   
   def error
