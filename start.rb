@@ -9,6 +9,7 @@ class MainController < Ramaze::Controller
   def index( id = nil )
     if id
       id.gsub!( /[^#{ID_CHARS}]/, '' )
+      id.gsub!( %r{[./]}, '' )
       path = zepto_path( id )
       if File.exists?( path ) and File.file?( path )
         uri = File.read( path ).strip
