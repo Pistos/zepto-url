@@ -2,7 +2,7 @@ require 'ramaze'
 
 # By Pistos
 # http://blog.purepistos.net
-# Clever id generation algorithm by manveru.
+# Clever id<->index mapping algorithm by manveru.
 
 
 class MainController < Ramaze::Controller
@@ -26,6 +26,8 @@ class MainController < Ramaze::Controller
       if File.exists?( path ) and File.file?( path )
         uri = File.read( path ).strip
         if not uri.empty?
+          t = Time.now
+          File.utime( t, t, path )
           redirect uri
         end
       end
@@ -55,6 +57,8 @@ class MainController < Ramaze::Controller
   def error
     "Huh? 404! Or is that 500? <a href='/'>Home</a>"
   end
+  
+  # ---------------------------------------------------------
   
   def index_to_id( index )
     r = 0
