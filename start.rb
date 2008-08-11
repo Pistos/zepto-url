@@ -6,6 +6,7 @@ class MainController < Ramaze::Controller
   ID_CHARS = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
   ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   
+  # Redirect using zepto id, or show home pgae.
   def index( id = nil )
     if id
       id.gsub!( /[^#{ID_CHARS}]/, '' )
@@ -20,6 +21,7 @@ class MainController < Ramaze::Controller
     end
   end
   
+  # Zep up a URI and show a result page.
   def zep( uri = nil, zepto_uri_only = nil )
     uri ||= request[ 'uri' ]
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
