@@ -22,8 +22,8 @@ class MainController < Ramaze::Controller
   end
   
   # Zep up a URI and show a result page.
-  def zep( uri = nil, zepto_uri_only = nil )
-    uri ||= request[ 'uri' ]
+  def zep( zepto_uri_only = nil )
+    uri = request[ 'uri' ]
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
     if not File.exist?( MAP_DIR )
       FileUtils.mkdir MAP_DIR
