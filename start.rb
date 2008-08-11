@@ -1,5 +1,10 @@
 require 'ramaze'
 
+# By Pistos
+# http://blog.purepistos.net
+# Clever id generation algorithm by manveru.
+
+
 class MainController < Ramaze::Controller
   MAP_DIR = "mapping"
   # If you change ID_CHARS ensure that it's filesystem safe.
