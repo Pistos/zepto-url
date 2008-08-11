@@ -30,7 +30,7 @@ class MainController < Ramaze::Controller
     path = nil
     loop do
       zepto_id = ""
-      8.times do
+      3.times do
         zepto_id << ID_CHARS[ rand( ID_CHARS.size - 1 ) ]
       end
       @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
