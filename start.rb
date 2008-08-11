@@ -41,7 +41,7 @@ class MainController < Ramaze::Controller
     next_index = nil
     zepto_id = nil
     @mutex.synchronize do
-      next_index = ( Dir[ "#{MAP_DIR }/*" ].map { |filename| filename.to_i }.max || 0 ) + 1
+      next_index = ( Dir[ "#{MAP_DIR}/*" ].map { |path| File.basename( path ).to_i }.max || 0 ) + 1
       zepto_id = index_to_id( next_index )
       File.open( zepto_path( next_index ), 'w' ) do |f|
         f.puts uri
