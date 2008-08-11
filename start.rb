@@ -8,7 +8,7 @@ require 'ramaze'
 class MainController < Ramaze::Controller
   MAP_DIR = "mapping"
   # If you change ID_CHARS ensure that it's filesystem safe.
-  ID_CHARS = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+  ID_CHARS = (48..128).map{ |c| c.chr }.grep( /[[:alnum:]]/ )
   ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   
   # Redirect using zepto id, or show home pgae.
@@ -34,19 +34,18 @@ class MainController < Ramaze::Controller
       FileUtils.mkdir MAP_DIR
     end
     
-    path = nil
-    loop do
-      zepto_id = ""
-      3.times do
-        zepto_id << ID_CHARS[ rand( ID_CHARS.size - 1 ) ]
-      end
-      @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
-      path = zepto_path( zepto_id )
-      
-      break if not File.exist?( path )
+    # Generate unique ID for the URI.
+    i = Dir[ "#{MAP_DIR }/*" ].size
+    r = 0
+    a = []
+    while i > 0
+      i, r = i.divmod ID_CHARS.size
+      a.unshift r
     end
+    zepto_id = a.map { |c| ID_CHARS[ c ] }.join
     
-    File.open( path, 'w' ) do |f|
+    @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
+    File.open( zepto_path( zepto_id ), 'w' ) do |f|
       f.puts uri
     end
     
