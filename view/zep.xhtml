@@ -1,3 +1,7 @@
+<?r if @zepto_uri_only ?>
+  #{@zepto_uri}
+<?r else ?> 
+
 <p>
 <a href="#{@original_uri}">#{@original_uri}</a>
 can now be reached from
@@ -7,3 +11,5 @@ can now be reached from
 <p>
 <a href="/">Zep up another URI!</a>
 </p>
+
+<?r end ?>

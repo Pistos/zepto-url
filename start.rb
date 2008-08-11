@@ -19,8 +19,9 @@ class MainController < Ramaze::Controller
     end
   end
   
-  def zep( uri = nil )
+  def zep( uri = nil, zepto_uri_only = nil )
     uri ||= request[ 'uri' ]
+    @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
     if not File.exist?( MAP_DIR )
       FileUtils.mkdir MAP_DIR
     end
