@@ -22,13 +22,15 @@ class MainController < Ramaze::Controller
   def index( id = nil )
     if id
       index = id_to_index( id )
-      path = zepto_path( index )
-      if File.exists?( path ) and File.file?( path )
-        uri = File.read( path ).strip
-        if not uri.empty?
-          t = Time.now
-          File.utime( t, t, path )
-          redirect uri
+      if index
+        path = zepto_path( index )
+        if File.exists?( path ) and File.file?( path )
+          uri = File.read( path ).strip
+          if not uri.empty?
+            t = Time.now
+            File.utime( t, t, path )
+            redirect uri
+          end
         end
       end
     end
@@ -71,10 +73,16 @@ class MainController < Ramaze::Controller
   end
   private :index_to_id
   
+  # Returns nil if the id is invalid
   def id_to_index( id )
     index, r = 0, 0
     id.scan( /./ ) do |c|
       r = ID_CHARS.index( c )
+      if r.nil?
+        # Bad id
+        index = nil
+        break
+      end
       index = index * ID_CHARS.size + r
     end
     index
