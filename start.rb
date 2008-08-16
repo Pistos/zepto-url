@@ -67,7 +67,7 @@ class MainController < Ramaze::Controller
     zepto_id = ""
     while index > 0
       index, r = index.divmod ID_CHARS.size
-      zepto_id << ID_CHARS[ r ]
+      zepto_id = ID_CHARS[ r ] + zepto_id
     end
     zepto_id
   end
