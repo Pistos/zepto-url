@@ -10,12 +10,14 @@ class MainController < Ramaze::Controller
   # If you change ID_CHARS ensure that it's filesystem safe.
   ID_CHARS = (48..128).map{ |c| c.chr }.grep( /[[:alnum:]]/ )
   ZEPTO_URI_BASE = "http://zep.purepistos.net/"
+  VISITOR_RECORD_LIFETIME = 3 * 60 # 3 minutes
   
   def initialize
     if not File.exist?( MAP_DIR )
       FileUtils.mkdir MAP_DIR
     end
     @mutex = Mutex.new
+    @visitors = []
   end
   
   # Redirect using zepto id, or show home page.
@@ -29,6 +31,8 @@ class MainController < Ramaze::Controller
           if not uri.empty?
             t = Time.now
             File.utime( t, t, path )
+            push_ip
+            throttle
             redirect uri
           end
         end
@@ -93,6 +97,33 @@ class MainController < Ramaze::Controller
     "#{MAP_DIR}/#{id}"
   end
   private :zepto_path
+  
+  def push_ip
+    @visitors << {
+      :ip => request.ip,
+      :time => Time.now,
+    }
+    vs = []
+    @visitors.reverse_each do |v|
+      if Time.now - v[ :time ] < VISITOR_RECORD_LIFETIME
+        vs.unshift v
+      else
+        break
+      end
+    end
+    @visitors = vs
+  end
+  private :push_ip
+  
+  # If the current visitor has been here "too often" in the past while
+  # then add a little delay to the server response.
+  def throttle
+    n = @visitors.find_all { |v| v[ :ip ] == request.ip }.size - 1
+    if n > 0
+      Ramaze::Log.debug "Throttling #{request.ip} by #{n} seconds"
+      sleep n
+    end
+  end
 end
 
 Ramaze.start :adapter => :mongrel, :port => 8006
