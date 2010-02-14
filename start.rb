@@ -1,7 +1,7 @@
 require 'ramaze'
-require 'hoptoad-notifier'
+#require 'hoptoad-notifier'
 
-Ramaze::Helper::HoptoadNotifier.trait[ :api_key ] = 'secret-key'
+#Ramaze::Helper::HoptoadNotifier.trait[ :api_key ] = 'secret-key'
 
 # By Pistos
 # http://blog.purepistos.net
