@@ -14,7 +14,7 @@ class MainController < Ramaze::Controller
   ID_CHARS = (48..128).map{ |c| c.chr }.grep( /[[:alnum:]]/ )
   ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   VISITOR_RECORD_LIFETIME = 3 * 60 # 3 minutes
-  
+
   def initialize
     if not File.exist?( MAP_DIR )
       FileUtils.mkdir MAP_DIR
@@ -22,7 +22,7 @@ class MainController < Ramaze::Controller
     @mutex = Mutex.new
     @visitors = []
   end
-  
+
   # Redirect using zepto id, or show home page.
   def index( id = nil )
     if id
@@ -42,12 +42,12 @@ class MainController < Ramaze::Controller
       end
     end
   end
-  
+
   # Zep up a URI and show a result page.
   def zep( zepto_uri_only = nil )
     uri = request[ 'uri' ]
     @zepto_uri_only = zepto_uri_only || request[ 'zepto_uri_only' ]
-    
+
     # Generate unique ID for the URI.
     next_index = nil
     zepto_id = nil
@@ -58,17 +58,17 @@ class MainController < Ramaze::Controller
         f.puts uri
       end
     end
-    
+
     @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
     @original_uri = uri
   end
-  
+
   def error
     "Huh? 404! Or is that 500? <a href='/'>Home</a>"
   end
-  
+
   # ---------------------------------------------------------
-  
+
   def index_to_id( index )
     r = 0
     zepto_id = ""
@@ -79,7 +79,7 @@ class MainController < Ramaze::Controller
     zepto_id
   end
   private :index_to_id
-  
+
   # Returns nil if the id is invalid
   def id_to_index( id )
     index, r = 0, 0
@@ -95,12 +95,12 @@ class MainController < Ramaze::Controller
     index
   end
   private :id_to_index
-  
+
   def zepto_path( id )
     "#{MAP_DIR}/#{id}"
   end
   private :zepto_path
-  
+
   def push_ip
     @visitors << {
       :ip => request.ip,
@@ -117,7 +117,7 @@ class MainController < Ramaze::Controller
     @visitors = vs
   end
   private :push_ip
-  
+
   # If the current visitor has been here "too often" in the past while
   # then add a little delay to the server response.
   def throttle
@@ -129,4 +129,4 @@ class MainController < Ramaze::Controller
   end
 end
 
-Ramaze.start :adapter => :mongrel, :port => 8006
+Ramaze.start :adapter => :thin, :port => ( ENV[ 'RAMAZE_PORT' ] || 8006 )
