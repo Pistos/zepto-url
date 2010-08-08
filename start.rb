@@ -12,7 +12,6 @@ class MainController < Ramaze::Controller
   MAP_DIR = "mapping"
   # If you change ID_CHARS ensure that it's filesystem safe.
   ID_CHARS = (48..128).map{ |c| c.chr }.grep( /[[:alnum:]]/ )
-  ZEPTO_URI_BASE = "http://zep.purepistos.net/"
   VISITOR_RECORD_LIFETIME = 3 * 60 # 3 minutes
 
   def initialize
@@ -40,6 +39,8 @@ class MainController < Ramaze::Controller
           end
         end
       end
+    else
+      @url = h request[:u]
     end
   end
 
@@ -59,7 +60,9 @@ class MainController < Ramaze::Controller
       end
     end
 
-    @zepto_uri = "#{ZEPTO_URI_BASE}#{zepto_id}"
+    @zepto_uri = URI(request.referer)
+    @zepto_uri.query = nil
+    @zepto_uri.path = "/#{zepto_id}"
     @original_uri = uri
   end
 
